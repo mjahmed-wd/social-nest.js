@@ -5,7 +5,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose';
+import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { User } from 'src/auth/schemas/user.schema';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -15,7 +16,7 @@ import { Post } from './schemas/post.schema';
 export class PostService {
   constructor(
     @InjectModel(Post.name)
-    private postModel: Model<Post>,
+    private postModel: SoftDeleteModel<Post>,
   ) {}
 
   async create(createPostDto: CreatePostDto, user: User): Promise<Post> {
@@ -103,9 +104,9 @@ export class PostService {
     }
   }
 
-  async remove(id: ObjectId): Promise<Post> {
+  async remove(id: ObjectId) {
     try {
-      const result = await this.postModel.findByIdAndDelete(id);
+      const result = await this.postModel.softDelete({ _id: id });
       if (!result) {
         throw new BadRequestException('Bad Request');
       }

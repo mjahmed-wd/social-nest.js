@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, ObjectId } from 'mongoose';
+import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 import { User } from 'src/auth/schemas/user.schema';
 import { Comment } from 'src/comment/schemas/comment.schemas';
 
@@ -34,4 +35,5 @@ export class Post extends Document {
   author: ObjectId;
 }
 
-export const PostSchema = SchemaFactory.createForClass(Post);
+export const PostSchema =
+  SchemaFactory.createForClass(Post).plugin(softDeletePlugin);

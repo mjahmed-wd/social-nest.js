@@ -32,13 +32,5 @@ export class Comment extends Document {
   // postId: ObjectId;
 }
 
-// Use soft delete plugin
-// mongoose.plugin(
-//   new SoftDelete({
-//     isDeletedField: 'isDeleted',
-//     deletedAtField: 'deletedAt',
-//   }).getPlugin(),
-// );
-
 export const CommentSchema =
   SchemaFactory.createForClass(Comment).plugin(softDeletePlugin);
