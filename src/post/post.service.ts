@@ -37,7 +37,10 @@ export class PostService {
 
   async findAll(): Promise<Post[]> {
     try {
-      const result = await this.postModel.find().populate('author');
+      const result = await this.postModel
+        .find()
+        .populate('author')
+        .populate('comments');
       return result;
     } catch (error) {
       throw new Error(error.message);
@@ -46,7 +49,10 @@ export class PostService {
 
   async findOne(id: ObjectId): Promise<Post> {
     try {
-      const result = await this.postModel.findById(id).populate('author');
+      const result = await this.postModel
+        .findById(id)
+        .populate('author')
+        .populate('comments');
       if (!result) {
         throw new NotFoundException('Not Found');
       }

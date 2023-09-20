@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, ObjectId } from 'mongoose';
+import { ObjectId } from 'mongoose';
+import { SoftDeleteModel } from 'soft-delete-plugin-mongoose';
 import { User } from 'src/auth/schemas/user.schema';
 import { Post } from 'src/post/schemas/post.schema';
 import { CreateCommentDto } from './dto/create-comment.dto';
@@ -11,9 +12,9 @@ import { Comment } from './schemas/comment.schemas';
 export class CommentService {
   constructor(
     @InjectModel(Comment.name)
-    private commentModel: Model<Comment>,
+    private commentModel: SoftDeleteModel<Comment>,
     @InjectModel(Post.name)
-    private postModel: Model<Post>,
+    private postModel: SoftDeleteModel<Post>,
   ) {}
 
   async create(
@@ -97,7 +98,7 @@ export class CommentService {
       if (!isSameUser) {
         throw new Error('You are not authorized to delete this comment');
       }
-      const comment = await this.commentModel.findByIdAndDelete(id);
+      const comment = await this.commentModel.softDelete({ _id: id });
       return comment;
     } catch (error) {
       throw new Error(error);

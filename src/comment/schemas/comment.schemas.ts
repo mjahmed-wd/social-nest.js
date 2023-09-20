@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document, ObjectId } from 'mongoose';
+import { softDeletePlugin } from 'soft-delete-plugin-mongoose';
 import { User } from 'src/auth/schemas/user.schema';
 // import { Post } from 'src/post/schemas/post.schema';
-import { Post } from '../../post/schemas/post.schema';
+// import { SoftDelete } from 'soft-delete-mongoose-plugin';
 
 @Schema({
   timestamps: true,
@@ -12,6 +13,8 @@ import { Post } from '../../post/schemas/post.schema';
       delete ret.__v;
       delete ret._id;
       delete ret.createdAt;
+      delete ret.isDeleted;
+      delete ret.deletedAt;
     },
   },
 })
@@ -29,4 +32,13 @@ export class Comment extends Document {
   // postId: ObjectId;
 }
 
-export const CommentSchema = SchemaFactory.createForClass(Comment);
+// Use soft delete plugin
+// mongoose.plugin(
+//   new SoftDelete({
+//     isDeletedField: 'isDeleted',
+//     deletedAtField: 'deletedAt',
+//   }).getPlugin(),
+// );
+
+export const CommentSchema =
+  SchemaFactory.createForClass(Comment).plugin(softDeletePlugin);
