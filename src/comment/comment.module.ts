@@ -1,13 +1,15 @@
 import { Module } from '@nestjs/common';
-import { CommentService } from './comment.service';
-import { CommentController } from './comment.controller';
-import { AuthModule } from 'src/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from 'src/auth/auth.module';
+import { PostModule } from 'src/post/post.module';
+import { CommentController } from './comment.controller';
+import { CommentService } from './comment.service';
 import { CommentSchema } from './schemas/comment.schemas';
 
 @Module({
   imports: [
     AuthModule,
+    PostModule,
     MongooseModule.forFeature([{ name: 'Comment', schema: CommentSchema }]),
   ],
   controllers: [CommentController],
